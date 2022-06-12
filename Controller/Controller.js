@@ -1,54 +1,56 @@
 import mongoose from 'mongoose';
-
-const MONGO_USERNAME = 'nnder';
-const MONGO_PASSWORD = 'passwd';
-const MONGO_HOSTNAME = '127.0.0.1';
-const MONGO_PORT = '27017';
-const MONGO_DB = 'app';
-
-const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
-mongoose.connect(url, {useNewUrlParser: true});
-
-const Schema = mongoose.Schema;
-
-const User = new Schema({
-    name: {type: String, required: true},
-    phone: {type: Number, required: true}
-})
-
-mongoose.model('user', User)
-
+import User from '../Schema/User.js';
 
 class Controller{
-    async createOne(){
-        let user = new User(req.body)
-        user.save((err)=>{
-            if(err){
-                res.status(500).send('Error');
-            } else {
-                res.status(201).json(user);
-            }
-        })
+    async createOne(req,res){
+        const {name, phone} = req.body;
+        console.log(req.body);
+        let result = await User.create({name,phone})
+        res.status(201).json(result);
     }
 
-    async createMany(){
+    async createMany(req,res){
+
+        try {
+            let users = req.body;
+
+            console.log(typeof users);
+            for(let user of users){
+                console.log(user);
+                const {name, phone} = user;
+                let result = await User.create({name,phone})
+            
+            }
+
+            res.status(201).json(users);
+
+        } catch (e) {
+            res.status(500).json({Message:"Error", ...e});
+        }
         
     }
 
-    async getAll(){
-
+    async getAll(req,res){
+        let result = await User.find();
+        res.json(result);
     }
 
-    async getOne(){
-
+    async getOne(req,res){
+        console.log(req.params.id);
+        let result = await User.findById(req.params.id);
+        res.json(result);
     }
 
-    async delete(){
-
+    async delete(req,res){
+        console.log(req.params.id);
+        let result = await User.findByIdAndDelete(req.params.id);
+        res.json(result);
     }
 
-    async update(){
-
+    async update(req,res){
+        console.log(req.params.id);
+        let result = await User.findByIdAndUpdate(req.params.id,req,body,{new:true});
+        res.json(result);
     }
 
 

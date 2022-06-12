@@ -17,5 +17,13 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nnder/rest-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nnder/rest-api/issues"
+  },
+  "homepage": "https://github.com/Nnder/rest-api#readme"
 }
